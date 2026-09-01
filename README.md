@@ -1,145 +1,87 @@
 <div align="center">
 
-  <img src="./public/apuntes_mascot.png" alt="Sumire Apuntes Mascot" width="160" style="border-radius: 50%; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);" />
+  <img src="./public/apuntes_mascot.png" alt="Sumire Logo" width="150" style="border-radius: 50%; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.35);" />
 
-  # 🌸 Sumire Apuntes Universitarios
-  
-  **Tu espacio de estudio digital inteligente con libretas 3D, horario dinámico y control de versiones.**
+  # 🌸 Sumire
 
-  [![Version](https://img.shields.io/badge/version-1.0.0-8b5cf6.svg?style=for-the-badge&logo=semver&logoColor=white)](CHANGELOG.md)
-  [![React](https://img.shields.io/badge/React-19.2-61DAFB.svg?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
-  [![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6.svg?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-  [![Electron](https://img.shields.io/badge/Electron-44.1-47848F.svg?style=for-the-badge&logo=electron&logoColor=white)](https://www.electronjs.org/)
-  [![Vite](https://img.shields.io/badge/Vite-8.2-646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-  [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.3-38B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  **Plataforma integral de organización académica y toma de notas para estudiantes universitarios.**
+
+  [![Version](https://img.shields.io/badge/Versión-1.0.0-8b5cf6.svg?style=for-the-badge&logoColor=white)](CHANGELOG.md)
+  [![Plataforma](https://img.shields.io/badge/Plataforma-Windows_Desktop-0078D4.svg?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/eugeniocvz222-sketch/Sumire)
+  [![Modo Offline](https://img.shields.io/badge/Funcionamiento-100%25_Offline-10B981.svg?style=for-the-badge&logoColor=white)](https://github.com/eugeniocvz222-sketch/Sumire)
 
   <p align="center">
-    <a href="#-características-principales">Características</a> •
-    <a href="#-capturas-y-diseño">Diseño 3D</a> •
-    <a href="#-instalación-y-ejecución">Instalación</a> •
-    <a href="#-empaquetado-a-exe">Generar .EXE</a> •
-    <a href="#-atajos-de-teclado">Atajos</a>
+    <a href="#-sobre-sumire">Sobre la Aplicación</a> •
+    <a href="#-lo-que-puedes-hacer">Funcionalidades</a> •
+    <a href="#-experiencia-de-uso">Experiencia</a> •
+    <a href="#-instalación">Instalación</a>
   </p>
 
 </div>
 
 ---
 
-## ✨ Descripción General
+## 📖 Sobre Sumire
 
-**Sumire Apuntes** es una aplicación de escritorio moderna diseñada específicamente para estudiantes universitarios. Combina una interfaz estética inspirada en el diseño moderno de **21st.dev**, física tridimensional realista en libretas de estudio, edición en tiempo real con Markdown y listas interactivas, además de un sistema **Offline-First** que te permite tomar notas en clase sin depender de conexión a internet.
+**Sumire** es un entorno de trabajo académico diseñado para acompañar a los estudiantes a lo largo de su carrera universitaria. Centraliza en un solo lugar la toma de apuntes, la administración de materias por cuatrimestres o semestres, el control de horarios de clase y el seguimiento de tareas, exámenes y calificaciones.
 
----
-
-## 🚀 Características Principales
-
-### 📖 1. Libretas Digitales 3D Realistas
-* **Física y Perspectiva 3D:** Cada materia cobra vida en una libreta tridimensional con grosor de hojas físicas, lomo grabado con relieve y listón marcapáginas dinámico.
-* **Estudio de Personalización en Vivo:** Diseña tus materias eligiendo entre 6 patrones táctiles (*Minimal*, *Cuadrícula Técnica*, *Blueprint*, *Matriz de Puntos*, *Ondas Japonesas*, *Cyber Grid*), paletas de colores y ángulos de inclinación interactivos.
-
-### ✍️ 2. Editor de Apuntes Universitario (TipTap & Markdown)
-* **Formato Enriquecido Instantáneo:** Títulos jerárquicos (H1, H2, H3), listas de tareas interactivas, bloques de código, citas y fórmulas.
-* **Barra de Herramientas Reactiva:** Sincronización en tiempo real que resalta las herramientas activas según la posición de tu cursor.
-* **Exportación Rápida:** Descarga cualquier nota como archivo `.md` independiente con un solo clic.
-
-### 🕒 3. Historial de Versiones y Puntos de Restauración
-* **Línea de Tiempo de Snapshots:** Guarda automáticamente versiones anteriores de cada nota con fecha, hora exacta, número de palabras y caracteres.
-* **Previsualizador de Revisiones:** Inspecciona cambios anteriores sin modificar tu nota activa.
-* **Restauración Segura en 1 Clic:** Vuelve al estado deseado creando un respaldo automático del texto actual antes de restaurar.
-* **Puntos de Control Manuales:** Crea marcas con nombres personalizados (ej. *"Antes del examen parcial"*).
-
-### ⏰ 4. Horario Semanal con Reloj Digital Integrado
-* **Cuadrícula Compacta de 6 Días (Lunes a Sábado):** Organiza tus materias y aulas con ordenamiento cronológico automático.
-* **Selector Digital de Horas:** Selector de tiempo estilo reloj digital con saltos configurados a intervalos de 15 minutos (ej. `17:30 - 18:15`).
-* **Auto-completado Inteligente:** Vincula materias existentes y detecta automáticamente profesor y aula asignada.
-
-### 🖼️ 5. Personalización de Portada y Perfil (Estilo Facebook)
-* **Encuadre Directo en Pantalla:** Arrastra libremente tu banner sobre la interfaz para ajustar la posición visual.
-* **2 Modos de Visualización:**
-  * **Llenar & Mover (`Cover`):** Con soporte de zoom (100% a 250%).
-  * **Ver Completa (`Contain`):** Fondo cinemático ambiental con desenfoque automático (`ambient glow`).
-* **Estudio de Recorte Interactivo (`ImageCropper`):** Recuadro con 8 puntos de ajuste, cuadrícula de Regla de Tercios fotográfica, proporciones fijas (3:1, 16:9, 4:3, 1:1, Círculo) y soporte de GIFs animados.
-
-### 🎯 6. Tablero de Tareas, Exámenes y Calificaciones
-* **Gestor de Pendientes:** Control de tareas, proyectos, exámenes y quizes con semáforo de prioridad y fecha límite.
-* **Celebración con Confeti:** Animaciones interactivas al completar entregas o aprobar materias.
-* **Calculadora de Promedios:** Registro de parciales, examen final y ponderaciones mínimas aprobatorias.
+Desarrollada bajo una filosofía **Offline-First**, Sumire te permite trabajar dentro del aula sin depender de conexión a internet ni preocuparte por la pérdida de información.
 
 ---
 
-## ⌨️ Atajos de Teclado del Sistema
+## 🎯 ¿Qué puedes hacer con Sumire?
 
-| Atajo | Acción |
+### 📚 Gestión Completa de Materias y Periodos
+* Organiza tus asignaturas por cuatrimestre, semestre o ciclo escolar activo.
+* Accede al instante a la información de cada materia: código, docente, aula asignada y temario por unidades.
+
+### ✍️ Redacción de Apuntes sin Distracciones
+* Toma notas enriquecidas durante tus clases con títulos estructurados, listas de verificación, bloques de código, citas y fórmulas.
+* **Seguridad y recuperación:** Guarda tu avance automáticamente conforme escribes y cuenta con un sistema de restauración para recuperar versiones anteriores en caso de cambios no deseados.
+* Exporta tus notas a formato Markdown (`.md`) para compartirlas o respaldarlas fácilmente.
+
+### ⏰ Horario de Clases Dinámico
+* Visualiza tu semana académica de lunes a sábado de forma clara y ordenada.
+* Consulta rápidamente qué materia te toca, en qué salón y con qué profesor en cualquier momento del día.
+
+### 📋 Control de Entregas, Tareas y Exámenes
+* Administra tus compromisos académicos clasificados por tipo (tareas, proyectos, exámenes parciales y quices).
+* Visualiza prioridades y fechas límite para mantener tus entregas siempre a tiempo.
+
+### 📊 Seguimiento de Calificaciones y Promedios
+* Registra tus notas por parcial, proyecto final y examen ordinario.
+* Calcula automáticamente si alcanzas la ponderación mínima aprobatoria de cada materia.
+
+### 🎨 Entorno Personalizable
+* Configura tu perfil de estudiante con tu foto, biografía y portada panorámica interactiva.
+* Elige entre paletas de color y temas oscuros diseñados para reducir la fatiga visual durante largas sesiones de estudio.
+
+---
+
+## ⌨️ Atajos Rápidos de Productividad
+
+| Atajo | Función |
 |---|---|
-| <kbd>Ctrl</kbd> + <kbd>K</kbd> | 🔍 Abrir Paleta de Búsqueda Global instantánea |
-| <kbd>Ctrl</kbd> + <kbd>B</kbd> | 📁 Colapsar / Expandir Barra Lateral (o Negrita dentro del editor) |
-| <kbd>Ctrl</kbd> + <kbd>S</kbd> | 💾 Guardar apunte y crear punto de control |
-| <kbd>Ctrl</kbd> + <kbd>Z</kbd> | ↩️ Deshacer último cambio |
-| <kbd>Ctrl</kbd> + <kbd>Y</kbd> | ↪️ Rehacer cambio |
+| <kbd>Ctrl</kbd> + <kbd>K</kbd> | Búsqueda global instantánea de cualquier apunte o materia |
+| <kbd>Ctrl</kbd> + <kbd>B</kbd> | Ocultar / Mostrar la barra de navegación lateral |
+| <kbd>Ctrl</kbd> + <kbd>S</kbd> | Guardar apunte actual y registrar un punto de control |
 
 ---
 
-## 🛠️ Instalación y Ejecución Local
+## 💻 Instalación y Uso
 
-### Prerrequisitos
-* [Node.js](https://nodejs.org/) (versión 18 o superior recomendada)
-* [Git](https://git-scm.com/)
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/eugeniocvz222-sketch/Sumire.git
-
-# 2. Entrar a la carpeta
-cd Sumire
-
-# 3. Instalar dependencias
-npm install
-
-# 4. Iniciar en modo desarrollo
-npm run dev
-```
+### Descargar e Instalar en Windows
+1. Descarga el instalador oficial **`Sumire Apuntes Setup.exe`** desde la sección de [Releases](https://github.com/eugeniocvz222-sketch/Sumire/releases).
+2. Ejecuta el archivo y sigue el asistente de instalación.
+3. Se creará un acceso directo en tu escritorio listo para usar.
 
 ---
 
-## 📦 Generar Instalador de Windows (.EXE)
+## 🧑‍💻 Créditos
 
-Puedes empaquetar la aplicación en un instalador nativo de Windows o en una versión portable con un solo comando:
-
-```bash
-# Generar el Instalador de Windows (.exe con Asistente)
-npm run app:installer
-
-# Generar la versión Portable (Doble clic y abre directo, sin instalar)
-npm run app:portable
-```
-
-> 📁 Los archivos `.exe` generados se guardan automáticamente en la carpeta `release/`.
-
----
-
-## 🚀 Flujo de Releases Automáticos (Semantic Versioning)
-
-Lanza y etiqueta nuevas versiones oficiales con compilación automática:
-
-```bash
-# Parche de correcciones (ej. v1.0.0 -> v1.0.1)
-npm run release:patch
-
-# Nueva funcionalidad (ej. v1.0.0 -> v1.1.0)
-npm run release:minor
-
-# Actualización mayor (ej. v1.0.0 -> v2.0.0)
-npm run release:major
-```
-
----
-
-## 🧑‍💻 Autor y Créditos
-
-* **Desarrollador:** [Eugenio Cavazos](https://github.com/eugeniocvz222-sketch)
-* **Diseño & Componentes:** React 19, TipTap Editor, Tailwind CSS, Framer Motion & 21st.dev.
+* **Desarrollo y Diseño:** [Eugenio Cavazos](https://github.com/eugeniocvz222-sketch)
 
 <div align="center">
   <br />
-  Hecho con 💜 para estudiantes universitarios.
+  🌸 <em>Diseñado para hacer tu vida universitaria más simple, productiva y organizada.</em>
 </div>
