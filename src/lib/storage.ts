@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { AppData, Note, UserProfile } from '../types'
 import { initialAppData } from './initialData'
+import { MASCOT_IMAGE } from './mascot'
 
 const FILE_NAME = 'apuntes_data.json'
 const USERS_INDEX_KEY = 'apuntes_local_users_v1'
@@ -78,7 +79,7 @@ export class StorageService {
         passwordHash,
         career: userData.career || 'Ingeniería en Tecnologías de la Información',
         university: userData.university || 'Universidad Tecnológica',
-        avatar: userData.avatar || '/apuntes_mascot.png',
+        avatar: userData.avatar || MASCOT_IMAGE,
         createdAt: new Date().toISOString(),
       }
 

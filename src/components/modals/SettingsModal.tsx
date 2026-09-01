@@ -30,6 +30,7 @@ import { alerts } from '../../lib/alerts'
 import { logger, LogEntry, LogLevel } from '../../lib/logger'
 import { AIProviderType } from '../../types'
 import { AIService } from '../../lib/aiService'
+import { MASCOT_IMAGE } from '../../lib/mascot'
 
 interface SettingsModalProps {
   isOpen: boolean
@@ -233,7 +234,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
         <div className="p-6 border-b border-white/5 bg-[#06060c] flex items-center justify-between">
           <div className="flex items-center gap-3.5">
             <div className="relative w-11 h-11 rounded-2xl overflow-hidden shadow-md shadow-purple-600/30 ring-2 ring-purple-500/40 shrink-0 bg-[#05050a]">
-              <img src="/apuntes_mascot.png" alt="Apuntes Mascot" className="w-full h-full object-cover" />
+              <img src={MASCOT_IMAGE} alt="Sumire AI Mascot" className="w-full h-full object-cover" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white tracking-tight">Configuración del Sistema</h2>

@@ -21,6 +21,7 @@ import { useApp } from '../../context/AppContext'
 import { ShimmerButton } from '../reactbits/ShimmerButton'
 import { ClickSpark } from '../reactbits/ClickSpark'
 import { alerts } from '../../lib/alerts'
+import { MASCOT_IMAGE } from '../../lib/mascot'
 
 interface OnboardingDialogProps {
   isOpen: boolean
@@ -64,7 +65,7 @@ export const OnboardingDialog: React.FC<OnboardingDialogProps> = ({ isOpen, onCl
             <div className="relative mb-4">
               <div className="w-24 h-24 rounded-2xl bg-[#080812] border-2 border-purple-500/40 p-1 shadow-xl shadow-purple-900/40 overflow-hidden flex items-center justify-center">
                 <img
-                  src="/apuntes_mascot.png"
+                  src={MASCOT_IMAGE}
                   alt="Sumire Mascot"
                   className="w-full h-full object-contain hover:scale-105 transition-transform"
                 />

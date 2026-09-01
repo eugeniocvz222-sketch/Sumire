@@ -18,6 +18,7 @@ import confetti from 'canvas-confetti'
 import { alerts } from '../lib/alerts'
 import { dbClient } from '../lib/dbClient'
 import { applyThemeVariables } from '../components/common/ThemeConfig'
+import { MASCOT_IMAGE } from '../lib/mascot'
 
 interface AppContextType {
   // Auth & Profile
@@ -231,7 +232,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       email,
       career: '',
       university: '',
-      avatar: '/apuntes_mascot.png',
+      avatar: MASCOT_IMAGE,
       createdAt: new Date().toISOString(),
     }
     localStorage.setItem('apuntes_active_user_id', newUser.id)

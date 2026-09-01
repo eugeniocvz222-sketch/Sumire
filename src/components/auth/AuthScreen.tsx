@@ -19,9 +19,10 @@ import { DecryptedText } from '../reactbits/DecryptedText'
 import { ClickSpark } from '../reactbits/ClickSpark'
 import { ShimmerButton } from '../reactbits/ShimmerButton'
 import { alerts } from '../../lib/alerts'
+import { MASCOT_IMAGE } from '../../lib/mascot'
 
 const PRESET_AVATARS = [
-  '/apuntes_mascot.png',
+  MASCOT_IMAGE,
   'https://api.dicebear.com/7.x/bottts/svg?seed=student1',
   'https://api.dicebear.com/7.x/bottts/svg?seed=student2',
   'https://api.dicebear.com/7.x/bottts/svg?seed=coder3',
@@ -135,7 +136,7 @@ export const AuthScreen: React.FC = () => {
             {/* Header Brand */}
             <div className="text-center space-y-2">
               <div className="relative w-20 h-20 rounded-3xl overflow-hidden mx-auto shadow-2xl shadow-purple-600/50 ring-2 ring-purple-400/50 group bg-[#05050a]">
-                <img src="/apuntes_mascot.png" alt="Apuntes AI Mascot" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src={MASCOT_IMAGE} alt="Sumire AI Mascot" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
               </div>
               <h1 className="text-2xl font-black text-white tracking-tight">
                 <ShinyText text="Sumire" speed={3.5} />
@@ -222,7 +223,7 @@ export const AuthScreen: React.FC = () => {
               {/* Header Brand */}
               <div className="text-center space-y-1.5">
                 <div className="relative w-14 h-14 rounded-2xl overflow-hidden mx-auto shadow-xl shadow-purple-600/40 ring-2 ring-purple-400/40 bg-[#05050a]">
-                  <img src="/apuntes_mascot.png" alt="Sumire AI Mascot" className="w-full h-full object-cover" />
+                  <img src={MASCOT_IMAGE} alt="Sumire AI Mascot" className="w-full h-full object-cover" />
                 </div>
                 <h1 className="text-xl font-black text-white tracking-tight">
                   <ShinyText text="Crear Cuenta en Sumire" speed={3.5} />

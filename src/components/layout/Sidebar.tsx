@@ -14,6 +14,7 @@ import {
 import { useApp } from '../../context/AppContext'
 import { ShinyText } from '../reactbits/ShinyText'
 import { LineSidebarGroup, LineSidebarItem } from '../reactbits/LineSidebar'
+import { MASCOT_IMAGE } from '../../lib/mascot'
 
 interface SidebarProps {
   onOpenNewSubject: () => void
@@ -103,7 +104,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <>
             <div className="flex items-center gap-3">
               <div className="relative w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-[var(--theme-glow,rgba(147,51,234,0.4))] ring-2 ring-[var(--theme-border,rgba(147,51,234,0.5))] shrink-0 group bg-[#05050a]">
-                <img src="/apuntes_mascot.png" alt="Apuntes AI Mascot" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                <img src={MASCOT_IMAGE} alt="Sumire AI Mascot" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
               </div>
               <div>
                 <h1 className="text-sm font-bold text-white tracking-tight flex items-center gap-1.5">
@@ -130,7 +131,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="relative w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-[var(--theme-glow,rgba(147,51,234,0.4))] ring-2 ring-[var(--theme-border,rgba(147,51,234,0.5))] hover:scale-105 transition-all cursor-pointer group bg-[#05050a]"
             title="Expandir Barra Lateral (Ctrl+B)"
           >
-            <img src="/apuntes_mascot.png" alt="Apuntes AI Mascot" className="w-full h-full object-cover group-hover:opacity-60 transition-opacity" />
+            <img src={MASCOT_IMAGE} alt="Sumire AI Mascot" className="w-full h-full object-cover group-hover:opacity-60 transition-opacity" />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
               <PanelLeftOpen className="w-4 h-4 text-white" />
             </div>

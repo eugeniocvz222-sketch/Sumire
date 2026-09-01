@@ -34,6 +34,7 @@ import { ShimmerButton } from '../reactbits/ShimmerButton'
 import { alerts } from '../../lib/alerts'
 import { ImageCropper, CropAspectRatio } from './ImageCropper'
 import { BannerFitMode, BannerHeightMode } from '../../types'
+import { MASCOT_IMAGE } from '../../lib/mascot'
 
 const PRESET_BANNERS = [
   {
@@ -69,7 +70,7 @@ const PRESET_BANNERS = [
 ]
 
 const PRESET_AVATARS = [
-  '/apuntes_mascot.png',
+  MASCOT_IMAGE,
   'https://api.dicebear.com/7.x/bottts/svg?seed=student1',
   'https://api.dicebear.com/7.x/bottts/svg?seed=student2',
   'https://api.dicebear.com/7.x/bottts/svg?seed=coder3',
