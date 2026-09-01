@@ -374,7 +374,43 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose, o
                 </div>
               </div>
 
-              {/* Section 4: Onboarding Walkthrough & Shortcuts Guide */}
+              {/* Section 5: Auto-Updates & Software Version */}
+              <div className="bg-[#06060c] p-5 rounded-2xl border border-white/5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 text-white font-bold">
+                    <RefreshCw className="w-4 h-4 text-indigo-400" />
+                    <span>Actualizaciones del Sistema</span>
+                  </div>
+                  <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 font-mono font-bold">
+                    v1.0.0
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  Sumire busca mejoras automáticamente al iniciar conectándose con GitHub. También puedes buscar manualmente:
+                </p>
+                <div>
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if ((window as any).electronAPI?.checkForUpdates) {
+                        alerts.info('Buscando actualizaciones...', 'Conectando con GitHub')
+                        const res = await (window as any).electronAPI.checkForUpdates()
+                        if (res && !res.success && res.message) {
+                          alerts.info('Modo Desarrollo', res.message)
+                        }
+                      } else {
+                        alerts.success('Versión al día', 'Estás ejecutando la versión v1.0.0 de Sumire.')
+                      }
+                    }}
+                    className="px-4 py-2 bg-indigo-600/20 hover:bg-indigo-600 border border-indigo-500/30 text-indigo-300 hover:text-white rounded-xl text-xs font-semibold transition cursor-pointer inline-flex items-center gap-2"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    Buscar Actualizaciones Ahora
+                  </button>
+                </div>
+              </div>
+
+              {/* Section 6: Onboarding Walkthrough & Shortcuts Guide */}
               {onOpenOnboarding && (
                 <div className="bg-[#06060c] p-5 rounded-2xl border border-purple-500/20 space-y-3">
                   <div className="flex items-center justify-between">

@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'node:path'
 import fs from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { autoUpdater } from 'electron-updater'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 process.env.DIST = path.join(__dirname, '../dist')
@@ -11,13 +12,57 @@ let win: BrowserWindow | null
 
 const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
+function setupAutoUpdater(mainWindow: BrowserWindow) {
+  autoUpdater.autoDownload = true
+  autoUpdater.autoInstallOnAppQuit = true
+
+  autoUpdater.on('checking-for-update', () => {
+    mainWindow.webContents.send('updater:status', { status: 'checking' })
+  })
+
+  autoUpdater.on('update-available', (info) => {
+    mainWindow.webContents.send('updater:status', { status: 'available', info })
+  })
+
+  autoUpdater.on('update-not-available', (info) => {
+    mainWindow.webContents.send('updater:status', { status: 'not-available', info })
+  })
+
+  autoUpdater.on('download-progress', (progressObj) => {
+    mainWindow.webContents.send('updater:status', {
+      status: 'downloading',
+      percent: Math.round(progressObj.percent),
+    })
+  })
+
+  autoUpdater.on('update-downloaded', (info) => {
+    mainWindow.webContents.send('updater:status', { status: 'downloaded', info })
+  })
+
+  autoUpdater.on('error', (err) => {
+    mainWindow.webContents.send('updater:status', {
+      status: 'error',
+      error: err == null ? 'unknown' : (err.message || err).toString(),
+    })
+  })
+
+  // Check for updates automatically in production after window opens
+  if (app.isPackaged) {
+    setTimeout(() => {
+      autoUpdater.checkForUpdatesAndNotify().catch((err) => {
+        console.error('AutoUpdater check error:', err)
+      })
+    }, 4000)
+  }
+}
+
 function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 820,
     minWidth: 960,
     minHeight: 600,
-    title: 'Apuntes Universitarios',
+    title: 'Sumire Apuntes',
     backgroundColor: '#0b0f19',
     icon: path.join(process.env.VITE_PUBLIC || '', 'icon.png'),
     webPreferences: {
@@ -33,6 +78,8 @@ function createWindow() {
   } else {
     win.loadFile(path.join(process.env.DIST || '', 'index.html'))
   }
+
+  setupAutoUpdater(win)
 }
 
 // Ensure default notes directory exists
@@ -112,6 +159,22 @@ ipcMain.handle('fs:exportMarkdown', async (_, { defaultName, content }: { defaul
     }
   }
   return { success: false, canceled: true }
+})
+
+ipcMain.handle('app:checkForUpdates', async () => {
+  if (!app.isPackaged) {
+    return { success: false, message: 'En modo desarrollo no se comprueban actualizaciones' }
+  }
+  try {
+    const result = await autoUpdater.checkForUpdates()
+    return { success: true, result }
+  } catch (err: any) {
+    return { success: false, error: err.message }
+  }
+})
+
+ipcMain.on('app:restartAndInstall', () => {
+  autoUpdater.quitAndInstall()
 })
 
 app.on('window-all-closed', () => {

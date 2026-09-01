@@ -16,6 +16,7 @@ import { AuthModal } from './components/modals/AuthModal'
 import { OnboardingDialog } from './components/modals/OnboardingDialog'
 import { AuthScreen } from './components/auth/AuthScreen'
 import { ErrorBoundary } from './components/common/ErrorBoundary'
+import { UpdateNotifier } from './components/common/UpdateNotifier'
 import { Toaster } from 'sonner'
 
 const MainApp: React.FC = () => {
@@ -162,6 +163,9 @@ const MainApp: React.FC = () => {
           isOpen={isOnboardingOpen}
           onClose={() => setIsOnboardingOpen(false)}
         />
+
+        {/* In-app Auto Updater Notification Banner */}
+        <UpdateNotifier />
 
         {/* Sonner Toast Notifications Container */}
         <Toaster position="bottom-right" theme="dark" richColors closeButton />

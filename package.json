@@ -25,6 +25,13 @@
     "directories": {
       "output": "dist-package"
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "eugeniocvz222-sketch",
+        "repo": "Sumire"
+      }
+    ],
     "files": [
       "dist/**/*",
       "dist-electron/**/*"
@@ -64,6 +71,7 @@
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "electron-updater": "^6.8.9",
     "framer-motion": "^13.1.1",
     "lucide-react": "^1.38.0",
     "pg": "^8.23.0",
