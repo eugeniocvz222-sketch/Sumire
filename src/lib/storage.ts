@@ -183,6 +183,25 @@ export class StorageService {
   }
 
   /**
+   * Update or set user password locally with Bcrypt
+   */
+  static updateLocalUserPassword(userId: string, newPlainPassword: string): boolean {
+    try {
+      const users = this.getLocalUsers()
+      const index = users.findIndex((u) => u.id === userId)
+      if (index !== -1) {
+        const salt = bcrypt.genSaltSync(10)
+        users[index].passwordHash = bcrypt.hashSync(newPlainPassword, salt)
+        this.saveLocalUsers(users)
+        return true
+      }
+    } catch (e) {
+      console.error('Error updating user password:', e)
+    }
+    return false
+  }
+
+  /**
    * Load data with priority:
    * 1. Try Electron disk storage (if available and has file)
    * 2. Try browser localStorage for specific userId

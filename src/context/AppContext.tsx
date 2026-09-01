@@ -32,6 +32,7 @@ interface AppContextType {
     password: string
   ) => Promise<{ success: boolean; user?: UserProfile; error?: string }>
   updateProfile: (updates: Partial<UserProfile>) => void
+  updatePassword: (newPlainPassword: string) => boolean
   logout: () => void
   // Navigation & View
   periods: AcademicPeriod[]
@@ -283,6 +284,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const updated = { ...data, user: updatedUser }
     persist(updated)
     StorageService.updateLocalUserProfile(updatedUser.id, updates)
+  }
+
+  const updatePassword = (newPlainPassword: string): boolean => {
+    if (!data.user?.id) return false
+    return StorageService.updateLocalUserPassword(data.user.id, newPlainPassword)
   }
 
   const logout = () => {
@@ -756,6 +762,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         loginWithPassword,
         registerWithPassword,
         updateProfile,
+        updatePassword,
         logout,
         periods: data.periods,
         subjects: data.subjects,

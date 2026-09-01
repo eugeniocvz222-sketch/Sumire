@@ -26,6 +26,9 @@ import {
   Check,
   RotateCcw,
   Crop,
+  Lock,
+  Key,
+  EyeOff,
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { MinimalBackground } from '../reactbits/MinimalBackground'
@@ -86,7 +89,7 @@ const BANNER_HEIGHTS: Record<BannerHeightMode, { label: string; className: strin
 }
 
 export const ProfileView: React.FC = () => {
-  const { user, subjects, notes, tasks, activePeriod, updateProfile, exportData } = useApp()
+  const { user, subjects, notes, tasks, activePeriod, updateProfile, updatePassword, exportData } = useApp()
 
   const [name, setName] = useState(user?.name || '')
   const [email, setEmail] = useState(user?.email || '')
@@ -96,6 +99,12 @@ export const ProfileView: React.FC = () => {
   const [bio, setBio] = useState(user?.bio || '')
   const [avatar, setAvatar] = useState(user?.avatar || PRESET_AVATARS[0])
   const [banner, setBanner] = useState(user?.banner || PRESET_BANNERS[0].url)
+
+  // Password management state
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
 
   // Banner display parameters
   const [bannerFit, setBannerFit] = useState<BannerFitMode>(user?.bannerFit || 'cover')
@@ -312,6 +321,34 @@ export const ProfileView: React.FC = () => {
       bannerHeight,
     })
     alerts.success('Perfil guardado', 'Tus datos se actualizaron correctamente')
+  }
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!newPassword.trim()) {
+      alerts.error('Error', 'Por favor ingresa una contraseña.')
+      return
+    }
+    if (newPassword.length < 4) {
+      alerts.error('Contraseña muy corta', 'La contraseña debe tener al menos 4 caracteres.')
+      return
+    }
+    if (newPassword !== confirmPassword) {
+      alerts.error('No coinciden', 'Las contraseñas no coinciden. Verifica e intenta de nuevo.')
+      return
+    }
+
+    setIsUpdatingPassword(true)
+    const success = updatePassword(newPassword)
+    setIsUpdatingPassword(false)
+
+    if (success) {
+      alerts.success('¡Contraseña actualizada!', 'Tu nueva contraseña ha sido guardada en tu dispositivo.')
+      setNewPassword('')
+      setConfirmPassword('')
+    } else {
+      alerts.error('Error', 'No se pudo actualizar la contraseña.')
+    }
   }
 
   // Active values (either temp in edit mode or saved)
@@ -711,6 +748,73 @@ export const ProfileView: React.FC = () => {
                 </ClickSpark>
               </div>
             </form>
+
+            {/* ═══════════════ SECURITY & PASSWORD SECTION ═══════════════ */}
+            <div className="pt-8 border-t border-white/5 space-y-6">
+              <div className="border-l-4 border-emerald-500 pl-4">
+                <h2 className="text-xl font-extrabold text-white flex items-center gap-2.5">
+                  <Lock className="w-5 h-5 text-emerald-400" />
+                  <span>Seguridad y Contraseña</span>
+                </h2>
+                <p className="text-xs text-slate-400 mt-1">
+                  Establece o cambia la contraseña local de tu cuenta para iniciar sesión en este dispositivo.
+                </p>
+              </div>
+
+              <form onSubmit={handlePasswordSubmit} className="space-y-4 bg-black/40 border border-white/5 p-6 rounded-2xl shadow-xl">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+                      <Key className="w-3.5 h-3.5 text-emerald-400" /> Nueva Contraseña
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        required
+                        placeholder="Mínimo 4 caracteres"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        className="w-full px-4 py-2.5 bg-[#0a0a14] rounded-xl text-white placeholder-slate-500 border border-white/10 focus:border-emerald-500 focus:outline-hidden text-xs pr-10 transition"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+                      <Key className="w-3.5 h-3.5 text-emerald-400" /> Confirmar Contraseña
+                    </label>
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      placeholder="Repite la contraseña"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full px-4 py-2.5 bg-[#0a0a14] rounded-xl text-white placeholder-slate-500 border border-white/10 focus:border-emerald-500 focus:outline-hidden text-xs transition"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-end">
+                  <ClickSpark sparkColor="#10b981" sparkCount={8}>
+                    <button
+                      type="submit"
+                      disabled={isUpdatingPassword}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow-lg shadow-emerald-950/40 cursor-pointer disabled:opacity-50"
+                    >
+                      <Lock className="w-3.5 h-3.5" />
+                      <span>{isUpdatingPassword ? 'Actualizando...' : 'Actualizar Contraseña'}</span>
+                    </button>
+                  </ClickSpark>
+                </div>
+              </form>
+            </div>
           </div>
 
           {/* Sidebar Metrics */}
