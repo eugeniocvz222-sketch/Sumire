@@ -702,7 +702,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const importData = async (file: File): Promise<boolean> => {
     const imported = await StorageService.importBackup(file)
     if (imported) {
-      persist(imported)
+      const clean = sanitizeData(imported)
+      setData(clean)
+      if (clean.user) {
+        localStorage.setItem('apuntes_active_user_id', clean.user.id)
+        setIsAuthenticated(true)
+      }
+      const currentPeriod = clean.periods?.find((p) => p.isCurrent) || clean.periods?.[0]
+      if (currentPeriod) {
+        setActivePeriodId(currentPeriod.id)
+        setSelectedSemester(currentPeriod.name)
+      }
+      StorageService.saveData(clean, clean.user?.id)
       return true
     }
     return false

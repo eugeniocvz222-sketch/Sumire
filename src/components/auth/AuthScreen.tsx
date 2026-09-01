@@ -31,7 +31,7 @@ const PRESET_AVATARS = [
 ]
 
 export const AuthScreen: React.FC = () => {
-  const { loginWithPassword, registerWithPassword } = useApp()
+  const { loginWithPassword, registerWithPassword, importData } = useApp()
   const [screen, setScreen] = useState<'login' | 'register'>('login')
   const [isLoading, setIsLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -48,6 +48,30 @@ export const AuthScreen: React.FC = () => {
   const [regUniversity, setRegUniversity] = useState('')
   const [avatar, setAvatar] = useState(PRESET_AVATARS[0])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const backupFileInputRef = useRef<HTMLInputElement>(null)
+
+  // Direct JSON Backup Restore Handler (from Login Screen)
+  const handleBackupUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsLoading(true)
+    try {
+      const ok = await importData(file)
+      if (ok) {
+        alerts.success('¡Respaldo importado con éxito!', 'Tu cuenta y todos tus apuntes han sido restaurados.')
+      } else {
+        alerts.error('Error al importar', 'El archivo no tiene el formato de respaldo de Sumire.')
+      }
+    } catch (err: any) {
+      alerts.error('Error al procesar archivo', err.message || 'No se pudo leer el archivo de respaldo')
+    } finally {
+      setIsLoading(false)
+      if (backupFileInputRef.current) {
+        backupFileInputRef.current.value = ''
+      }
+    }
+  }
 
   // Upload Local Image to Base64 (syncs everywhere)
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -128,6 +152,15 @@ export const AuthScreen: React.FC = () => {
     <div className="relative w-screen h-screen overflow-hidden bg-[#030306] flex items-center justify-center p-4 select-none">
       {/* Background Plasma Effect */}
       <Plasma />
+
+      {/* Hidden Backup File Input */}
+      <input
+        type="file"
+        ref={backupFileInputRef}
+        accept=".json"
+        onChange={handleBackupUpload}
+        className="hidden"
+      />
 
       {/* Auth Card Container */}
       <div className="relative z-10 w-full max-w-md bg-[#0a0a14]/90 backdrop-blur-2xl border border-purple-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-purple-950/50">
@@ -214,6 +247,20 @@ export const AuthScreen: React.FC = () => {
                   className="text-xs text-purple-400 hover:text-purple-300 font-bold cursor-pointer transition hover:underline"
                 >
                   Regístrate aquí
+                </button>
+              </div>
+
+              {/* Direct Backup Restore Option */}
+              <div className="pt-2 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => backupFileInputRef.current?.click()}
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-purple-950/30 hover:bg-purple-900/40 border border-purple-500/20 hover:border-purple-500/50 text-purple-300 hover:text-white text-xs font-medium transition cursor-pointer group shadow-inner"
+                  title="Cargar respaldo previo de otra máquina o navegador"
+                >
+                  <Upload className="w-3.5 h-3.5 text-purple-400 group-hover:-translate-y-0.5 transition-transform" />
+                  <span>Restaurar desde archivo de respaldo (.json)</span>
                 </button>
               </div>
             </div>
@@ -392,6 +439,20 @@ export const AuthScreen: React.FC = () => {
                   className="text-xs text-purple-400 hover:text-purple-300 font-bold cursor-pointer transition hover:underline"
                 >
                   Inicia sesión aquí
+                </button>
+              </div>
+
+              {/* Direct Backup Restore Option */}
+              <div className="pt-2 border-t border-white/5">
+                <button
+                  type="button"
+                  onClick={() => backupFileInputRef.current?.click()}
+                  disabled={isLoading}
+                  className="w-full flex items-center justify-center gap-2 px-3.5 py-2.5 rounded-xl bg-purple-950/30 hover:bg-purple-900/40 border border-purple-500/20 hover:border-purple-500/50 text-purple-300 hover:text-white text-xs font-medium transition cursor-pointer group shadow-inner"
+                  title="Cargar respaldo previo de otra máquina o navegador"
+                >
+                  <Upload className="w-3.5 h-3.5 text-purple-400 group-hover:-translate-y-0.5 transition-transform" />
+                  <span>Restaurar desde archivo de respaldo (.json)</span>
                 </button>
               </div>
             </div>
