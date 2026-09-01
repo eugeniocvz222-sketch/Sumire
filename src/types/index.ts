@@ -134,6 +134,19 @@ export interface UserProfile {
 
 export type SystemTheme = 'purple' | 'red' | 'emerald' | 'blue' | 'amber' | 'cyberpunk'
 
+export type AIProviderType = 'gemini' | 'openai' | 'ollama' | 'off'
+
+export interface AIConfig {
+  provider: AIProviderType
+  geminiApiKey?: string
+  geminiModel?: string
+  openaiApiKey?: string
+  openaiModel?: string
+  openaiBaseUrl?: string
+  ollamaEndpoint?: string
+  ollamaModel?: string
+}
+
 export interface AppSettings {
   activePeriodId?: string
   activeSemester: string
@@ -145,6 +158,7 @@ export interface AppSettings {
   supabaseAnonKey?: string
   userEmail?: string
   lastSyncedAt?: string
+  aiConfig?: AIConfig
 }
 
 export interface AppData {

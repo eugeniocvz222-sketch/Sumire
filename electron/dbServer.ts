@@ -3,11 +3,11 @@ import bcrypt from 'bcryptjs'
 import { AppData, AcademicPeriod, Subject, Note, Task, SubjectGrade, UserProfile } from '../src/types'
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'apuntes',
-  password: '123456789',
-  port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'apuntes',
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
   max: 10,
   idleTimeoutMillis: 30000,
 })

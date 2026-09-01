@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Sparkles,
   BookOpen,
@@ -87,15 +87,15 @@ export const OnboardingDialog: React.FC<OnboardingDialogProps> = ({ isOpen, onCl
           <div className="grid grid-cols-3 gap-3 text-center">
             <div className="p-3 rounded-xl bg-purple-950/30 border border-purple-500/20">
               <div className="text-purple-400 font-bold text-sm">100% Local</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">PostgreSQL & Offline</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Plug & Play Offline</div>
             </div>
             <div className="p-3 rounded-xl bg-indigo-950/30 border border-indigo-500/20">
               <div className="text-indigo-400 font-bold text-sm">LaTeX & Código</div>
               <div className="text-[10px] text-slate-400 mt-0.5">Fórmulas & Syntax</div>
             </div>
             <div className="p-3 rounded-xl bg-pink-950/30 border border-pink-500/20">
-              <div className="text-pink-400 font-bold text-sm">Asistente IA</div>
-              <div className="text-[10px] text-slate-400 mt-0.5">Quizzes & Resúmenes</div>
+              <div className="text-pink-400 font-bold text-sm">IA Híbrida</div>
+              <div className="text-[10px] text-slate-400 mt-0.5">Gemini & Ollama Local</div>
             </div>
           </div>
         </div>

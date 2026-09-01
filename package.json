@@ -34,7 +34,14 @@
     ],
     "files": [
       "dist/**/*",
-      "dist-electron/**/*"
+      "dist-electron/**/*",
+      "public/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "public",
+        "to": "public"
+      }
     ],
     "win": {
       "target": [
@@ -51,14 +58,17 @@
           ]
         }
       ],
-      "icon": "public/apuntes_mascot.png"
+      "icon": "public/icon.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Sumire Apuntes"
+      "shortcutName": "Sumire Apuntes",
+      "installerIcon": "public/icon.ico",
+      "uninstallerIcon": "public/icon.ico",
+      "installerHeaderIcon": "public/icon.ico"
     }
   },
   "dependencies": {
@@ -71,13 +81,15 @@
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
     "electron-updater": "^6.8.9",
     "framer-motion": "^13.1.1",
     "lucide-react": "^1.38.0",
     "pg": "^8.23.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-icons": "^5.7.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.8",
     "sweetalert2": "^11.26.25",
     "sweetalert2-react-content": "^5.1.2",

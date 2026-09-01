@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
@@ -8,11 +9,11 @@ import bcrypt from 'bcryptjs'
 
 // PostgreSQL Pool for Dev Server
 const pgPool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'apuntes',
-  password: '123456789',
-  port: 5432,
+  user: process.env.DB_USER || 'postgres',
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'apuntes',
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
   max: 10,
 })
 
@@ -528,6 +529,7 @@ function postgresDevApiPlugin(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: './',
   plugins: [
     react(),
     tailwindcss(),
@@ -559,7 +561,7 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             if (id.includes('react') || id.includes('react-dom')) return 'vendor-react'
             if (id.includes('framer-motion')) return 'vendor-framer'
-            if (id.includes('lucide-react') || id.includes('react-icons')) return 'vendor-icons'
+            if (id.includes('lucide-react')) return 'vendor-icons'
             if (id.includes('@tiptap')) return 'vendor-tiptap'
           }
         },

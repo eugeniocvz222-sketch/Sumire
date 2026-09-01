@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 import path from 'node:path'
 import fs from 'node:fs'
@@ -56,6 +57,21 @@ function setupAutoUpdater(mainWindow: BrowserWindow) {
   }
 }
 
+function getAppIconPath(): string {
+  const publicDir = process.env.VITE_PUBLIC || path.join(__dirname, '../public')
+  const icoPath = path.join(publicDir, 'icon.ico')
+  const pngPath = path.join(publicDir, 'icon.png')
+  const mascotPng = path.join(publicDir, 'apuntes_mascot.png')
+
+  if (process.platform === 'win32' && fs.existsSync(icoPath)) {
+    return icoPath
+  }
+  if (fs.existsSync(pngPath)) {
+    return pngPath
+  }
+  return mascotPng
+}
+
 function createWindow() {
   win = new BrowserWindow({
     width: 1280,
@@ -64,7 +80,7 @@ function createWindow() {
     minHeight: 600,
     title: 'Sumire Apuntes',
     backgroundColor: '#0b0f19',
-    icon: path.join(process.env.VITE_PUBLIC || '', 'icon.png'),
+    icon: getAppIconPath(),
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs'),
       nodeIntegration: false,

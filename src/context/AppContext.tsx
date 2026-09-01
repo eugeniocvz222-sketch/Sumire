@@ -10,6 +10,7 @@ import {
   PeriodType,
   UserProfile,
   SystemTheme,
+  NoteVersion,
 } from '../types'
 import { StorageService } from '../lib/storage'
 import { initialAppData } from '../lib/initialData'
@@ -125,37 +126,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [selectedSemester, setSelectedSemester] = useState<string>('7mo Cuatrimestre')
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [isSyncing, setIsSyncing] = useState<boolean>(false)
-  const [syncMessage, setSyncMessage] = useState<string>('Conectado a PostgreSQL')
+  const [syncMessage, setSyncMessage] = useState<string>('Modo Local (100% Offline)')
 
-  // Auto-persist changes locally and sync with PostgreSQL
+  // Auto-persist changes locally via StorageService
   const persist = useCallback((newData: AppData) => {
     const clean = sanitizeData(newData)
     setData(clean)
     StorageService.saveData(clean, clean.user?.id)
-
-    // Background sync to PostgreSQL if user is logged in
-    if (clean.user?.id) {
-      dbClient.saveUserData(clean.user.id, clean).catch((err) => {
-        console.warn('[PostgreSQL Sync] Background sync warning:', err)
-      })
-    }
   }, [])
 
-  // Load data & Initialize PostgreSQL on startup
+  // Load data on startup
   useEffect(() => {
     async function init() {
-      // 1. Initialize PostgreSQL tables
-      await dbClient.init().catch((e) => console.warn('PostgreSQL init notice:', e))
-
-      // 2. Check if a user session was saved
+      // 1. Check if an active user session exists
       const savedUserId = localStorage.getItem('apuntes_active_user_id')
       if (savedUserId) {
-        let pgData = await dbClient.loadUserData(savedUserId)
-        if (!pgData || !pgData.user) {
-          pgData = await StorageService.loadData(savedUserId)
-        }
-        if (pgData && pgData.user) {
-          const clean = sanitizeData(pgData)
+        const loaded = await StorageService.loadData(savedUserId)
+        if (loaded && loaded.user) {
+          const clean = sanitizeData(loaded)
           setData(clean)
           setIsAuthenticated(true)
           const currentPeriod = clean.periods?.find((p) => p.isCurrent) || clean.periods?.[0]
@@ -167,7 +155,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       }
 
-      // 3. Fallback to clean local storage
+      // 2. Fallback to clean local storage
       const loaded = await StorageService.loadData(null)
       const clean = sanitizeData(loaded)
       setData(clean)
@@ -180,18 +168,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     init()
   }, [])
 
-  // Auth Actions with Bcrypt and PostgreSQL
+  // Auth Actions with Bcrypt and StorageService (100% Plug & Play Offline)
   const loginWithPassword = async (email: string, password: string) => {
     setIsSyncing(true)
     setSyncMessage('Autenticando...')
     try {
-      const res = await dbClient.login(email, password)
+      const res = await StorageService.loginLocalUser(email, password)
       if (res.success && res.user) {
         localStorage.setItem('apuntes_active_user_id', res.user.id)
-        let userData = await dbClient.loadUserData(res.user.id)
-        if (!userData || !userData.user) {
-          userData = await StorageService.loadData(res.user.id)
-        }
+        const userData = await StorageService.loadData(res.user.id)
         if (userData && userData.user) {
           const clean = sanitizeData(userData)
           setData(clean)
@@ -201,41 +186,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             setActivePeriodId(currentPeriod.id)
             setSelectedSemester(currentPeriod.name)
           }
-        } else {
-          const freshData: AppData = {
-            user: res.user,
-            periods: [
-              {
-                id: `period-${Date.now()}`,
-                name: '7mo Cuatrimestre',
-                type: 'cuatrimestre',
-                dateRange: 'Septiembre - Diciembre 2026',
-                isCurrent: true,
-                createdAt: new Date().toISOString(),
-              },
-            ],
-            subjects: [],
-            notes: [],
-            tasks: [],
-            grades: [],
-            settings: {
-              activeSemester: '7mo Cuatrimestre',
-              theme: 'dark',
-              systemTheme: 'purple',
-              storagePath: 'Local / Sincronizado',
-              cloudSyncEnabled: true,
-            },
-          }
-          setData(freshData)
-          StorageService.saveData(freshData, res.user.id)
         }
         setIsAuthenticated(true)
-        setSyncMessage('Conectado')
+        setSyncMessage('Modo Local (100% Offline)')
         return { success: true, user: res.user }
       }
       return { success: false, error: res.error || 'Correo o contraseña incorrectos. Verifica tus datos e intenta de nuevo.' }
     } catch (e: any) {
-      return { success: false, error: e.message || 'Error de conexión' }
+      return { success: false, error: e.message || 'Error al iniciar sesión' }
     } finally {
       setIsSyncing(false)
     }
@@ -246,46 +204,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     password: string
   ) => {
     setIsSyncing(true)
-    setSyncMessage('Registrando usuario...')
+    setSyncMessage('Creando cuenta local...')
     try {
-      const res = await dbClient.register(userData, password)
+      const res = await StorageService.registerLocalUser(userData, password)
       if (res.success && res.user) {
         localStorage.setItem('apuntes_active_user_id', res.user.id)
-        const freshData: AppData = {
-          user: res.user,
-          periods: [
-            {
-              id: `period-${Date.now()}`,
-              name: '7mo Cuatrimestre',
-              type: 'cuatrimestre',
-              dateRange: 'Septiembre - Diciembre 2026',
-              isCurrent: true,
-              createdAt: new Date().toISOString(),
-            },
-          ],
-          subjects: [],
-          notes: [],
-          tasks: [],
-          grades: [],
-          settings: {
-            activeSemester: '7mo Cuatrimestre',
-            theme: 'dark',
-            systemTheme: 'purple',
-            storagePath: 'Local / Sincronizado',
-            cloudSyncEnabled: true,
-          },
-        }
-        setData(freshData)
-        StorageService.saveData(freshData, res.user.id)
-        await dbClient.saveUserData(res.user.id, freshData).catch(() => {})
-        
+        const freshLoaded = await StorageService.loadData(res.user.id)
+        const clean = sanitizeData(freshLoaded)
+        setData(clean)
         setIsAuthenticated(true)
-        setSyncMessage('Conectado')
+        setSyncMessage('Modo Local (100% Offline)')
         return { success: true, user: res.user }
       }
       return { success: false, error: res.error || 'No se pudo crear la cuenta' }
     } catch (e: any) {
-      return { success: false, error: e.message || 'Error de conexión' }
+      return { success: false, error: e.message || 'Error al crear la cuenta' }
     } finally {
       setIsSyncing(false)
     }
@@ -348,6 +281,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const updatedUser = { ...data.user, ...updates }
     const updated = { ...data, user: updatedUser }
     persist(updated)
+    StorageService.updateLocalUserProfile(updatedUser.id, updates)
   }
 
   const logout = () => {

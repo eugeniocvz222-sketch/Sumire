@@ -28,6 +28,8 @@ import {
   X,
   FileCode,
   History,
+  Sparkles,
+  Bot,
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { COLOR_SCHEMES } from '../common/ColorMap'
@@ -35,11 +37,14 @@ import { alerts } from '../../lib/alerts'
 import { ShimmerButton } from '../reactbits/ShimmerButton'
 import { VersionHistoryModal } from './VersionHistoryModal'
 import { NoteVersion } from '../../types'
+import { AIService } from '../../lib/aiService'
+import { MarkdownView } from '../common/MarkdownView'
 
 export const NoteEditor: React.FC = () => {
   const {
     activeNote,
     activeSubject,
+    settings,
     createNote,
     updateNote,
     deleteNote,
@@ -56,6 +61,7 @@ export const NoteEditor: React.FC = () => {
   const [newTagInput, setNewTagInput] = useState('')
   const [isAddingTag, setIsAddingTag] = useState(false)
   const [isHistoryOpen, setIsHistoryOpen] = useState(false)
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved')
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [, setSelectionTick] = useState(0)
@@ -164,6 +170,40 @@ export const NoteEditor: React.FC = () => {
     const success = await exportNoteMarkdown(activeNote.id)
     if (success) {
       alerts.success('Apunte exportado', `Se guardó "${activeNote.title}.md"`)
+    }
+  }
+
+  const handleGenerateAISummary = async () => {
+    if (!activeNote) return
+    const aiConfig = settings.aiConfig || { provider: 'gemini' }
+
+    if (
+      aiConfig.provider === 'off' ||
+      (aiConfig.provider === 'gemini' && !aiConfig.geminiApiKey?.trim()) ||
+      (aiConfig.provider === 'openai' && !aiConfig.openaiApiKey?.trim())
+    ) {
+      alerts.info(
+        'Configura tu Proveedor de IA',
+        'Ve a Ajustes (⚙️) y selecciona tu proveedor (Google Gemini, OpenAI u Ollama local) para generar resúmenes automáticos.'
+      )
+      return
+    }
+
+    setIsGeneratingSummary(true)
+    alerts.info('Analizando apunte...', 'Sumire AI está extrayendo los conceptos clave.')
+
+    try {
+      const summaryText = await AIService.generateSummary(
+        activeNote.content,
+        activeNote.title,
+        aiConfig
+      )
+      updateNote(activeNote.id, { summary: summaryText })
+      alerts.success('Resumen generado con éxito', 'Se guardó en tu apunte.')
+    } catch (err: any) {
+      alerts.error('Error al generar resumen', err.message || 'No se pudo conectar con el modelo de IA.')
+    } finally {
+      setIsGeneratingSummary(false)
     }
   }
 
@@ -282,6 +322,20 @@ export const NoteEditor: React.FC = () => {
             </span>
           </button>
 
+          {/* AI Summary Button */}
+          <button
+            type="button"
+            onClick={handleGenerateAISummary}
+            disabled={isGeneratingSummary}
+            title="Generar Resumen Inteligente con IA (Gemini / OpenAI / Ollama)"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-gradient-to-r from-purple-600/25 via-indigo-600/25 to-purple-600/25 hover:from-purple-600/40 hover:to-indigo-600/40 text-purple-200 border border-purple-500/40 transition text-xs font-semibold cursor-pointer shadow-sm disabled:opacity-50"
+          >
+            <Sparkles className={`w-3.5 h-3.5 text-purple-400 ${isGeneratingSummary ? 'animate-spin' : ''}`} />
+            <span className="hidden md:inline">
+              {isGeneratingSummary ? 'Resumiendo...' : 'Resumen IA'}
+            </span>
+          </button>
+
           <button
             onClick={() => toggleFavoriteNote(activeNote.id)}
             title={activeNote.isFavorite ? 'Quitar de Favoritos' : 'Marcar Favorito'}
@@ -327,6 +381,37 @@ export const NoteEditor: React.FC = () => {
           <span>Creado el {new Date(activeNote.createdAt).toLocaleDateString()}</span>
         </div>
       </div>
+
+      {/* AI Summary Card (If generated) */}
+      {activeNote.summary && (
+        <div className="mx-8 my-2 p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30 backdrop-blur-md relative group animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold text-purple-300 flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-purple-400" />
+              Resumen Inteligente (Sumire AI)
+            </span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleGenerateAISummary}
+                className="text-[11px] text-purple-400 hover:text-purple-200 transition font-medium cursor-pointer"
+              >
+                Regenerar
+              </button>
+              <button
+                type="button"
+                onClick={() => updateNote(activeNote.id, { summary: undefined })}
+                className="text-[11px] text-slate-500 hover:text-rose-400 transition cursor-pointer"
+              >
+                Ocultar
+              </button>
+            </div>
+          </div>
+          <div className="pt-2 border-t border-purple-500/15">
+            <MarkdownView content={activeNote.summary} />
+          </div>
+        </div>
+      )}
 
       {/* Editor Formatting Toolbar */}
       {editor && (

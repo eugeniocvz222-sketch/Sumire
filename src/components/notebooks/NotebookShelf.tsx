@@ -113,21 +113,6 @@ export const NotebookShelf: React.FC = () => {
                 </span>
               </div>
             </div>
-
-            {/* Top Create Button */}
-            <ClickSpark sparkColor="var(--theme-primary, #c084fc)" sparkCount={10}>
-              <ShimmerButton
-                onClick={() => {
-                  setEditingSubject(null)
-                  setIsModalOpen(true)
-                }}
-                variant="primary"
-                size="md"
-                icon={<Plus className="w-4 h-4" />}
-              >
-                Crear Libreta
-              </ShimmerButton>
-            </ClickSpark>
           </div>
         </div>
 
