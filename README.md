@@ -6,9 +6,10 @@
 
   **Plataforma integral de organización académica y toma de notas para estudiantes universitarios.**
 
-  [![Version](https://img.shields.io/badge/Versión-1.0.0-8b5cf6.svg?style=for-the-badge&logoColor=white)](CHANGELOG.md)
+  [![Version](https://img.shields.io/badge/Versión-1.0.1-8b5cf6.svg?style=for-the-badge&logoColor=white)](CHANGELOG.md)
   [![Plataforma](https://img.shields.io/badge/Plataforma-Windows_Desktop-0078D4.svg?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/eugeniocvz222-sketch/Sumire)
   [![Modo Offline](https://img.shields.io/badge/Funcionamiento-100%25_Offline-10B981.svg?style=for-the-badge&logoColor=white)](https://github.com/eugeniocvz222-sketch/Sumire)
+  [![IA Híbrida](https://img.shields.io/badge/IA_Híbrida-Local_(Ollama/LM_Studio)_+_Cloud_(Gemini/OpenAI)-f59e0b.svg?style=for-the-badge&logo=openai&logoColor=white)](https://github.com/eugeniocvz222-sketch/Sumire)
 
   <p align="center">
     <a href="#-sobre-sumire">Sobre la Aplicación</a> •
@@ -52,9 +53,19 @@ Desarrollada bajo una filosofía **Offline-First**, Sumire te permite trabajar d
 * Registra tus notas por parcial, proyecto final y examen ordinario.
 * Calcula automáticamente si alcanzas la ponderación mínima aprobatoria de cada materia.
 
+### 🧠 Asistente de Estudio con Inteligencia Artificial Híbrida
+* **Modo Local 100% Privado (Ollama & LM Studio):** Escaneo y detección automática de los modelos de IA que ya tengas descargados en tu máquina (Llama 3, DeepSeek, Gemma, Mistral, Phi-3). Funciona completamente desconectado sin compartir datos fuera de tu equipo.
+* **Modo Cloud de Alta Potencia:** Conéctate opcionalmente a **Google Gemini** o **OpenAI (GPT-4o)** con tu propia API Key para razonamientos avanzados.
+* **Herramientas de IA Integradas en tus Apuntes:**
+  * 📝 **Mejora y Estructuración de Notas:** Convierte ideas sueltas en apuntes organizados con formato rico, tablas y bloques de código.
+  * 🗂️ **Generación Automática de Flashcards:** Crea tarjetas de memorización activa a partir de lo visto en clase.
+  * 💡 **Explicaciones Claras y Resúmenes:** Sintetiza temas complejos o genera preguntas de estudio antes de tus exámenes.
+  * 💬 **Chat Académico Integrado:** Pregunta dudas puntuales sobre tus materias sin salir de tu libreta.
+
 ### 🎨 Entorno Personalizable
 * Configura tu perfil de estudiante con tu foto, biografía y portada panorámica interactiva.
 * Elige entre paletas de color y temas oscuros diseñados para reducir la fatiga visual durante largas sesiones de estudio.
+* **📦 Migración y Respaldos:** Exporta e importa toda tu base de datos en formato `.json` para moverte entre computadoras o restaurar tu cuenta en un solo clic desde la pantalla de bienvenida.
 
 ---
 
