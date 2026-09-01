@@ -27,11 +27,14 @@ import {
   Plus,
   X,
   FileCode,
+  History,
 } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { COLOR_SCHEMES } from '../common/ColorMap'
 import { alerts } from '../../lib/alerts'
 import { ShimmerButton } from '../reactbits/ShimmerButton'
+import { VersionHistoryModal } from './VersionHistoryModal'
+import { NoteVersion } from '../../types'
 
 export const NoteEditor: React.FC = () => {
   const {
@@ -42,6 +45,8 @@ export const NoteEditor: React.FC = () => {
     deleteNote,
     toggleFavoriteNote,
     exportNoteMarkdown,
+    saveNoteVersion,
+    restoreNoteVersion,
     setActiveNoteId,
   } = useApp()
 
@@ -50,6 +55,7 @@ export const NoteEditor: React.FC = () => {
   const [tags, setTags] = useState<string[]>(activeNote?.tags || [])
   const [newTagInput, setNewTagInput] = useState('')
   const [isAddingTag, setIsAddingTag] = useState(false)
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false)
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving'>('saved')
   const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [, setSelectionTick] = useState(0)
@@ -256,6 +262,25 @@ export const NoteEditor: React.FC = () => {
               </span>
             )}
           </span>
+
+          {/* Version History Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (activeNote) {
+                saveNoteVersion(activeNote.id, 'Punto actual')
+              }
+              setIsHistoryOpen(true)
+            }}
+            title="Historial de versiones y puntos de restauración"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/25 transition text-xs font-semibold cursor-pointer shadow-sm"
+          >
+            <History className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Versiones</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-indigo-500/30 text-indigo-200 font-mono">
+              {activeNote.versions?.length || 0}
+            </span>
+          </button>
 
           <button
             onClick={() => toggleFavoriteNote(activeNote.id)}
@@ -476,6 +501,22 @@ export const NoteEditor: React.FC = () => {
           <EditorContent editor={editor} />
         </div>
       </div>
+
+      {/* Version History Modal */}
+      {isHistoryOpen && activeNote && (
+        <VersionHistoryModal
+          note={activeNote}
+          onCreateManualSnapshot={(label) => {
+            saveNoteVersion(activeNote.id, label)
+          }}
+          onRestoreVersion={(version) => {
+            restoreNoteVersion(activeNote.id, version.id)
+            setTitle(version.title)
+            editor?.commands.setContent(version.content || '')
+          }}
+          onClose={() => setIsHistoryOpen(false)}
+        />
+      )}
     </div>
   )
 }

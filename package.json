@@ -13,6 +13,9 @@
     "app:dist": "node scripts/build-installer.js",
     "app:portable": "node scripts/build-installer.js --portable",
     "app:installer": "node scripts/build-installer.js",
+    "release:patch": "node scripts/release.js patch",
+    "release:minor": "node scripts/release.js minor",
+    "release:major": "node scripts/release.js major",
     "lint": "oxlint",
     "preview": "vite preview"
   },

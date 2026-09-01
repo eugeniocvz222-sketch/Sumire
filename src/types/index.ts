@@ -67,6 +67,18 @@ export interface Subject {
   updatedAt: string
 }
 
+export interface NoteVersion {
+  id: string
+  noteId: string
+  title: string
+  content: string // HTML format snapshot
+  summary?: string
+  createdAt: string
+  characterCount: number
+  wordCount: number
+  label?: string // e.g. "Auto-guardado", "Punto de control", "Antes de restaurar"
+}
+
 export interface Note {
   id: string
   subjectId: string
@@ -77,6 +89,7 @@ export interface Note {
   tags: string[]
   isFavorite: boolean
   isPinned: boolean
+  versions?: NoteVersion[]
   createdAt: string
   updatedAt: string
   syncStatus: 'synced' | 'pending' | 'local_only'

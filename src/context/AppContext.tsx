@@ -73,6 +73,8 @@ interface AppContextType {
   deleteNote: (id: string) => void
   toggleFavoriteNote: (id: string) => void
   exportNoteMarkdown: (noteId: string) => Promise<boolean>
+  saveNoteVersion: (noteId: string, label?: string) => void
+  restoreNoteVersion: (noteId: string, versionId: string) => void
   // Task CRUD
   createTask: (task: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'isCompleted'>) => Task
   toggleTask: (id: string) => void
@@ -563,6 +565,81 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return await StorageService.exportNoteAsMarkdown(note, subject?.name || 'General')
   }
 
+  const countWords = (html: string) => {
+    const text = html.replace(/<[^>]*>/g, ' ').trim()
+    return text ? text.split(/\s+/).length : 0
+  }
+
+  const countChars = (html: string) => {
+    return html.replace(/<[^>]*>/g, '').length
+  }
+
+  const saveNoteVersion = (noteId: string, label?: string) => {
+    const note = data.notes.find((n) => n.id === noteId)
+    if (!note) return
+
+    const newVersion: NoteVersion = {
+      id: `ver-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      noteId,
+      title: note.title,
+      content: note.content,
+      summary: note.summary,
+      createdAt: new Date().toISOString(),
+      characterCount: countChars(note.content),
+      wordCount: countWords(note.content),
+      label: label || 'Punto de guardado',
+    }
+
+    const existingVersions = note.versions || []
+    const updatedVersions = [newVersion, ...existingVersions].slice(0, 30)
+    const updated = {
+      ...data,
+      notes: data.notes.map((n) => (n.id === noteId ? { ...n, versions: updatedVersions } : n)),
+    }
+    persist(updated)
+    alerts.success('Versión guardada', label || 'Punto de restauración creado')
+  }
+
+  const restoreNoteVersion = (noteId: string, versionId: string) => {
+    const note = data.notes.find((n) => n.id === noteId)
+    if (!note) return
+
+    const targetVersion = (note.versions || []).find((v) => v.id === versionId)
+    if (!targetVersion) return
+
+    // Save a backup checkpoint of current state before overwriting
+    const currentBackup: NoteVersion = {
+      id: `ver-${Date.now()}-backup`,
+      noteId,
+      title: note.title,
+      content: note.content,
+      summary: note.summary,
+      createdAt: new Date().toISOString(),
+      characterCount: countChars(note.content),
+      wordCount: countWords(note.content),
+      label: 'Copia previa a restauración',
+    }
+
+    const updatedVersions = [currentBackup, ...(note.versions || [])].slice(0, 30)
+
+    const updated = {
+      ...data,
+      notes: data.notes.map((n) =>
+        n.id === noteId
+          ? {
+              ...n,
+              title: targetVersion.title,
+              content: targetVersion.content,
+              summary: targetVersion.summary,
+              versions: updatedVersions,
+              updatedAt: new Date().toISOString(),
+            }
+          : n
+      ),
+    }
+    persist(updated)
+  }
+
   // Task Actions
   const createTask = (
     taskParams: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'isCompleted'>
@@ -772,6 +849,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         deleteNote,
         toggleFavoriteNote,
         exportNoteMarkdown,
+        saveNoteVersion,
+        restoreNoteVersion,
         createTask,
         toggleTask,
         deleteTask,
